@@ -53,3 +53,5 @@ dependencies {
 
 
 task ciPullRequest(dependsOn: ["clean", "check", "lint", "assembleDebug"])
+
+task qaCheck(dependsOn: ["ciPullRequest", "connectedAndroidTest"])
