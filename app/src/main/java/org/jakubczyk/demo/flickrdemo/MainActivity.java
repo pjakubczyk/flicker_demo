@@ -8,12 +8,26 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-public class MainActivity extends AppCompatActivity {
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+
+
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+
+    private MainActivityContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        presenter = new MainActivityPresenter();
+        presenter.create(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.destroy();
+        super.onDestroy();
     }
 
     @Override
@@ -28,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+
+        presenter.observeSearch(RxSearchView.queryTextChanges(searchView));
 
         return true;
     }
