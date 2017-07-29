@@ -19,7 +19,8 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
 
     @Override
     public void observeSearch(Observable<CharSequence> charSequenceObservable) {
-        // TODO: print searched text on screen
+        charSequenceObservable
+                .subscribe(charSequence -> view.showSearchText(charSequence));
     }
 
 }

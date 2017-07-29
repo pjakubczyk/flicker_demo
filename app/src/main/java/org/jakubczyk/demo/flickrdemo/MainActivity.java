@@ -47,4 +47,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         return true;
     }
+
+    @Override
+    public void showSearchText(CharSequence charSequence) {
+
+    }
 }

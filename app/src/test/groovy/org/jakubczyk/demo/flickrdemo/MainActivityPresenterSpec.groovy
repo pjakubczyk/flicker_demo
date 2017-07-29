@@ -1,5 +1,6 @@
 package org.jakubczyk.demo.flickrdemo
 
+import rx.Observable
 import spock.lang.Specification
 
 class MainActivityPresenterSpec extends Specification {
@@ -31,5 +32,19 @@ class MainActivityPresenterSpec extends Specification {
 
         then:
         !presenter.view
+    }
+
+    def "should publish searched text"() {
+        given:
+        def searchStream = Observable.just("hey there")
+
+        and:
+        presenter.create(view)
+
+        when:
+        presenter.observeSearch(searchStream)
+
+        then:
+        1 * view.showSearchText("hey there")
     }
 }

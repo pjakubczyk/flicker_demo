@@ -6,6 +6,7 @@ public class MainActivityContract {
 
     public interface View {
 
+        void showSearchText(CharSequence charSequence);
     }
 
     public interface Presenter {
