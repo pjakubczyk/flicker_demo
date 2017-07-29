@@ -10,15 +10,19 @@ import android.view.MenuInflater;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
+import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
+
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
     private MainActivityContract.Presenter presenter;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         presenter = new MainActivityPresenter();
         presenter.create(this);
@@ -50,6 +54,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     public void showSearchText(CharSequence charSequence) {
-
+        binding.theText.setText(charSequence);
     }
 }
