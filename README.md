@@ -1,5 +1,6 @@
 # flicker_demo
 A demo project to be in shape
+[![Build Status](https://travis-ci.org/pjakubczyk/flickr_demo.svg?branch=master)](https://travis-ci.org/pjakubczyk/flickr_demo)
 
 # build project
 There are two main `gradle` tasks:
