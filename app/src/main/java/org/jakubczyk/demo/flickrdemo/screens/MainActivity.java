@@ -1,4 +1,4 @@
-package org.jakubczyk.demo.flickrdemo;
+package org.jakubczyk.demo.flickrdemo.screens;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
+import org.jakubczyk.demo.flickrdemo.R;
 import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
 
 

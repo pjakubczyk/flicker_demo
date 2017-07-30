@@ -1,4 +1,4 @@
-package org.jakubczyk.demo.flickrdemo;
+package org.jakubczyk.demo.flickrdemo.screens;
 
 import rx.Observable;
 
