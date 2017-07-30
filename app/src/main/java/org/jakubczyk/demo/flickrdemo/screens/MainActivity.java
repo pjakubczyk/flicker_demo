@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        presenter = new MainActivityPresenter();
+        presenter = new MainActivityPresenter(component.getFlickrRepository());
         presenter.create(this);
     }
 
