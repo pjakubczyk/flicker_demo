@@ -29,7 +29,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    defaultConfig {
+        buildConfigField "String", "FLICKR_API_KEY", readFlickrApiKey()
+    }
 }
+
+println readFlickrApiKey()
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -64,3 +70,10 @@ dependencies {
 task ciPullRequest(dependsOn: ["clean", "check", "lint", "assembleDebug"])
 
 task qaCheck(dependsOn: ["ciPullRequest", "connectedAndroidTest"])
+
+def readFlickrApiKey() {
+
+    def keyFile = rootProject.file("flickr.key")
+
+    return String.format('"%s"', keyFile.text)
+}
