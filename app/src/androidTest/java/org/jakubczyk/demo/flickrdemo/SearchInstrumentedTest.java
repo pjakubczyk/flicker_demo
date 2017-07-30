@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 
 import org.hamcrest.Matcher;
-import org.jakubczyk.demo.flickrdemo.screens.MainActivity;
+import org.jakubczyk.demo.flickrdemo.screens.search.MainActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
