@@ -60,6 +60,21 @@ class MainActivityPresenterSpec extends Specification {
         }
     }
 
+    def "should not do any query on empty search"() {
+        given:
+        def searchStream = Observable.just("")
+
+        and:
+        presenter.create(view)
+
+        when:
+        presenter.observeSearch(searchStream)
+
+        then:
+        0 * flickrRepository.searchFlickr(_)
+        0 * view.addPhotos(_)
+    }
+
     def buildResponse() {
         def photo1 = new Photo(
                 id: "photo1_id"
