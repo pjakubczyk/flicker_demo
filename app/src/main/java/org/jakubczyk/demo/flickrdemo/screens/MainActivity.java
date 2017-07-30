@@ -10,11 +10,12 @@ import android.view.MenuInflater;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
+import org.jakubczyk.demo.flickrdemo.BaseActivity;
 import org.jakubczyk.demo.flickrdemo.R;
 import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
 
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+public class MainActivity extends BaseActivity implements MainActivityContract.View {
 
     private MainActivityContract.Presenter presenter;
     private ActivityMainBinding binding;
