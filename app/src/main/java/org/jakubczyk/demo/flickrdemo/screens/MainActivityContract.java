@@ -1,12 +1,16 @@
 package org.jakubczyk.demo.flickrdemo.screens;
 
+import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
+
+import java.util.List;
+
 import rx.Observable;
 
 public class MainActivityContract {
 
     public interface View {
 
-        void showSearchText(CharSequence charSequence);
+        void addPhotos(List<Photo> photoList);
     }
 
     public interface Presenter {

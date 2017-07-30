@@ -1,12 +1,10 @@
 package org.jakubczyk.demo.flickrdemo.data.repository;
 
-import android.util.Log;
-
 import org.jakubczyk.demo.flickrdemo.BuildConfig;
 import org.jakubczyk.demo.flickrdemo.data.api.FlickrConnector;
 import org.jakubczyk.demo.flickrdemo.data.api.json.SearchResponse;
 
-import rx.Subscriber;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -27,9 +25,9 @@ public class FlickrRepository {
         this.flikrConnector = flikrConnector;
     }
 
-    public void searchFlickr(String textToSearch) {
+    public Observable<SearchResponse> searchFlickr(String textToSearch) {
 
-        flikrConnector
+        return flikrConnector
                 .search(
                         FLICKR_API_METHOD,
                         BuildConfig.FLICKR_API_KEY,
@@ -40,23 +38,6 @@ public class FlickrRepository {
                         textToSearch
                 )
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchResponse>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted() called");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError() called with: e = [" + e + "]");
-                    }
-
-                    @Override
-                    public void onNext(SearchResponse responseBody) {
-                        Log.d(TAG, "onNext() called with: responseBody = [" + responseBody + "]");
-                    }
-                });
-
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

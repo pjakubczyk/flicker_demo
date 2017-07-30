@@ -8,7 +8,6 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
@@ -63,8 +62,8 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
     }
 
     @Override
-    public void showSearchText(CharSequence charSequence) {
-//        binding.theText.setText(charSequence);
+    public void addPhotos(List<Photo> photoList) {
+
     }
 
     static class SearchResultItem extends RecyclerView.ViewHolder {
