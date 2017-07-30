@@ -6,15 +6,11 @@ import org.jakubczyk.demo.flickrdemo.data.repository.FlickrRepository;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Scheduler;
-import rx.schedulers.Schedulers;
 
 public class MainActivityPresenter implements MainActivityContract.Presenter {
 
     private MainActivityContract.View view;
     private FlickrRepository flickrRepository;
-
-    Scheduler scheduler = Schedulers.io();
 
     public MainActivityPresenter(FlickrRepository flickrRepository) {
         this.flickrRepository = flickrRepository;
@@ -34,7 +30,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     public void observeSearch(Observable<CharSequence> charSequenceObservable) {
         charSequenceObservable
                 // don't flood with requests
-                .debounce(3, TimeUnit.SECONDS, scheduler)
+                .debounce(3, TimeUnit.SECONDS)
                 .filter(textToSearch -> textToSearch.length() > 0)
                 .flatMap(textToSearch -> flickrRepository.searchFlickr(textToSearch.toString()))
                 .map(searchResponse -> searchResponse.photos.photoList)

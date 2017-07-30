@@ -5,10 +5,7 @@ import org.jakubczyk.demo.flickrdemo.data.api.json.Photos
 import org.jakubczyk.demo.flickrdemo.data.api.json.SearchResponse
 import org.jakubczyk.demo.flickrdemo.data.repository.FlickrRepository
 import rx.Observable
-import rx.schedulers.TestScheduler
 import spock.lang.Specification
-
-import java.util.concurrent.TimeUnit
 
 class MainActivityPresenterSpec extends Specification {
 
@@ -16,15 +13,11 @@ class MainActivityPresenterSpec extends Specification {
     def view = Mock(MainActivityContract.View)
     def flickrRepository = Mock(FlickrRepository)
 
-    // rx
-    def testScheduler = new TestScheduler()
-
     // object under test
     MainActivityContract.Presenter presenter
 
     def "setup"() {
         presenter = new MainActivityPresenter(flickrRepository)
-        presenter.scheduler = testScheduler
     }
 
     def "should assign view on create"() {
@@ -58,9 +51,6 @@ class MainActivityPresenterSpec extends Specification {
 
         when:
         presenter.observeSearch(searchStream)
-
-        and:
-        testScheduler.advanceTimeBy(10, TimeUnit.SECONDS)
 
         then:
         view.addPhotos(_) >> { args ->
