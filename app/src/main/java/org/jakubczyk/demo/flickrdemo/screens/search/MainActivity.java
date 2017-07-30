@@ -1,22 +1,28 @@
-package org.jakubczyk.demo.flickrdemo;
+package org.jakubczyk.demo.flickrdemo.screens.search;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
+import org.jakubczyk.demo.flickrdemo.R;
+import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
+import org.jakubczyk.demo.flickrdemo.screens.BaseActivity;
+
+import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+public class MainActivity extends BaseActivity implements MainActivityContract.View {
 
     private MainActivityContract.Presenter presenter;
     private ActivityMainBinding binding;
+    private SearchResultAdapter searchResultAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +30,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        presenter = new MainActivityPresenter();
+        binding.searchResultList.setLayoutManager(new GridLayoutManager(this, 3));
+
+        searchResultAdapter = new SearchResultAdapter();
+        binding.searchResultList.setAdapter(searchResultAdapter);
+
+        presenter = new MainActivityPresenter(component.getFlickrRepository());
         presenter.create(this);
     }
 
@@ -53,7 +64,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     @Override
-    public void showSearchText(CharSequence charSequence) {
-        binding.theText.setText(charSequence);
+    public void addPhotos(List<Photo> photoList) {
+        searchResultAdapter.addItems(photoList);
     }
+
+
 }
