@@ -33,8 +33,8 @@ public class FlickrRepository {
                         BuildConfig.FLICKR_API_KEY,
                         FLICKR_API_FORMAT,
                         FLICKR_API_NO_JSON_CALLBACK,
-                        FLICKR_API_PAGE,
                         FLICKR_API_PAGE_SIZE,
+                        FLICKR_API_PAGE,
                         textToSearch
                 )
                 .subscribeOn(Schedulers.io())
