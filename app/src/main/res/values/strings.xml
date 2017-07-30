@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FlickrDemo</string>
     <string name="search_title">Search flickr</string>
+    <string name="search_encourage">Use search bar to browse flickr</string>
 </resources>

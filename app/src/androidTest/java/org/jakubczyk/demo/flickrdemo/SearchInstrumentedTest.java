@@ -1,5 +1,6 @@
 package org.jakubczyk.demo.flickrdemo;
 
+import android.os.SystemClock;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewAssertion;
 import android.support.test.rule.ActivityTestRule;
@@ -36,6 +37,8 @@ public class SearchInstrumentedTest {
 
         // when: use hack from SO to type text in serach box
         onView(isAssignableFrom(AutoCompleteTextView.class)).perform(typeText("kitten"));
+
+        SystemClock.sleep(3500);
 
         // then: Check that the text was changed.
         onView(withId(R.id.search_result_list))

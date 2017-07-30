@@ -3,6 +3,7 @@ package org.jakubczyk.demo.flickrdemo.screens;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -26,12 +27,18 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
 
     private MainActivityContract.Presenter presenter;
     private ActivityMainBinding binding;
+    private SearchResultAdapter searchResultAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.searchResultList.setLayoutManager(new GridLayoutManager(this, 3));
+
+        searchResultAdapter = new SearchResultAdapter();
+        binding.searchResultList.setAdapter(searchResultAdapter);
 
         presenter = new MainActivityPresenter(component.getFlickrRepository());
         presenter.create(this);
@@ -63,7 +70,7 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
 
     @Override
     public void addPhotos(List<Photo> photoList) {
-
+        searchResultAdapter.addItems(photoList);
     }
 
     static class SearchResultItem extends RecyclerView.ViewHolder {
@@ -77,7 +84,7 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
         }
 
         void bind(Photo photo) {
-            // TODO:
+            binding.searchResultTitle.setText(photo.title);
         }
     }
 
@@ -85,6 +92,11 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
     static class SearchResultAdapter extends RecyclerView.Adapter<SearchResultItem> {
 
         List<Photo> photoList = new ArrayList<>();
+
+        void addItems(List<Photo> morePhotos) {
+            photoList.addAll(morePhotos);
+            notifyDataSetChanged();
+        }
 
         @Override
         public SearchResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,7 +108,7 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
 
         @Override
         public void onBindViewHolder(SearchResultItem holder, int position) {
-            holder.bind(photoList.get(0));
+            holder.bind(photoList.get(position));
         }
 
         @Override
