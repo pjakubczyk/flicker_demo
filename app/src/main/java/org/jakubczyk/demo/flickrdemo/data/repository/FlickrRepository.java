@@ -4,8 +4,8 @@ import android.util.Log;
 
 import org.jakubczyk.demo.flickrdemo.BuildConfig;
 import org.jakubczyk.demo.flickrdemo.data.api.FlickrConnector;
+import org.jakubczyk.demo.flickrdemo.data.api.json.SearchResponse;
 
-import okhttp3.ResponseBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -17,6 +17,8 @@ public class FlickrRepository {
     private static final String FLICKR_API_METHOD = "flickr.photos.search";
     private static final String FLICKR_API_FORMAT = "json";
     private static final Integer FLICKR_API_NO_JSON_CALLBACK = 1;
+    private static final Integer FLICKR_API_PAGE = 1;
+    private static final Integer FLICKR_API_PAGE_SIZE = 20;
 
 
     private FlickrConnector flikrConnector;
@@ -33,11 +35,13 @@ public class FlickrRepository {
                         BuildConfig.FLICKR_API_KEY,
                         FLICKR_API_FORMAT,
                         FLICKR_API_NO_JSON_CALLBACK,
+                        FLICKR_API_PAGE,
+                        FLICKR_API_PAGE_SIZE,
                         textToSearch
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ResponseBody>() {
+                .subscribe(new Subscriber<SearchResponse>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onCompleted() called");
@@ -49,7 +53,7 @@ public class FlickrRepository {
                     }
 
                     @Override
-                    public void onNext(ResponseBody responseBody) {
+                    public void onNext(SearchResponse responseBody) {
                         Log.d(TAG, "onNext() called with: responseBody = [" + responseBody + "]");
                     }
                 });
