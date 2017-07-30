@@ -63,6 +63,8 @@ dependencies {
     compile 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
     testCompile 'org.codehaus.groovy:groovy:2.4.3:grooid'
 
     testCompile 'org.robospock:robospock:1.0.1'

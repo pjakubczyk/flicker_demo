@@ -1,4 +1,4 @@
-package org.jakubczyk.demo.flickrdemo.screens;
+package org.jakubczyk.demo.flickrdemo.screens.search;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
         }
 
         void bind(Photo photo) {
-            binding.searchResultTitle.setText(photo.title);
+
         }
     }
 

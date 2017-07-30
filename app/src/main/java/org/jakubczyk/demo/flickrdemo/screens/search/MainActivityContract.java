@@ -1,4 +1,4 @@
-package org.jakubczyk.demo.flickrdemo.screens;
+package org.jakubczyk.demo.flickrdemo.screens.search;
 
 import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 
