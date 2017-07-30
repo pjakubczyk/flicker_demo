@@ -4,22 +4,17 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.ViewGroup;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
-import org.jakubczyk.demo.flickrdemo.BaseActivity;
 import org.jakubczyk.demo.flickrdemo.R;
 import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
-import org.jakubczyk.demo.flickrdemo.databinding.SearchResultItemBinding;
+import org.jakubczyk.demo.flickrdemo.screens.BaseActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -73,47 +68,5 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
         searchResultAdapter.addItems(photoList);
     }
 
-    static class SearchResultItem extends RecyclerView.ViewHolder {
 
-        private final SearchResultItemBinding binding;
-
-        public SearchResultItem(SearchResultItemBinding binding) {
-            super(binding.getRoot());
-
-            this.binding = binding;
-        }
-
-        void bind(Photo photo) {
-
-        }
-    }
-
-
-    static class SearchResultAdapter extends RecyclerView.Adapter<SearchResultItem> {
-
-        List<Photo> photoList = new ArrayList<>();
-
-        void addItems(List<Photo> morePhotos) {
-            photoList.addAll(morePhotos);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public SearchResultItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new SearchResultItem(SearchResultItemBinding.inflate(
-                    LayoutInflater.from(parent.getContext())
-
-            ));
-        }
-
-        @Override
-        public void onBindViewHolder(SearchResultItem holder, int position) {
-            holder.bind(photoList.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return photoList.size();
-        }
-    }
 }
