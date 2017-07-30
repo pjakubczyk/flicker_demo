@@ -35,8 +35,6 @@ android {
     }
 }
 
-println readFlickrApiKey()
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -79,7 +77,11 @@ task qaCheck(dependsOn: ["ciPullRequest", "connectedAndroidTest"])
 
 def readFlickrApiKey() {
 
-    def keyFile = rootProject.file("flickr.key")
+    try {
+        def keyFile = rootProject.file("flickr.key2")
+        return String.format('"%s"', keyFile.text)
+    } catch (FileNotFoundException e) {
+        return '""';
+    }
 
-    return String.format('"%s"', keyFile.text)
 }
