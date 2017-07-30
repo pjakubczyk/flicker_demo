@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
@@ -37,6 +38,7 @@ public class SearchInstrumentedTest {
 
         // when: use hack from SO to type text in serach box
         onView(isAssignableFrom(AutoCompleteTextView.class)).perform(typeText("kitten"));
+        onView(isAssignableFrom(AutoCompleteTextView.class)).perform(closeSoftKeyboard());
 
         SystemClock.sleep(3500);
 
