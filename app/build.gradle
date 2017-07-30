@@ -44,6 +44,15 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding:1.0.1'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.1'
 
+    compile 'com.google.code.gson:gson:2.8.1'
+
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+
+    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
     testCompile 'org.codehaus.groovy:groovy:2.4.3:grooid'
 
     testCompile 'org.robospock:robospock:1.0.1'
