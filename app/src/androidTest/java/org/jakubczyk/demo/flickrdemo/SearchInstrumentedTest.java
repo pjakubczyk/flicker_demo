@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 
 import org.hamcrest.Matcher;
 import org.jakubczyk.demo.flickrdemo.screens.search.SearchActivity;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class SearchInstrumentedTest {
             SearchActivity.class);
 
     @Test
-    public void change_text_on_search() {
+    public void search_kittens() {
         // given: open search box
         onView(withId(R.id.search)).perform(click());
 
@@ -64,6 +65,27 @@ public class SearchInstrumentedTest {
         SystemClock.sleep(1500);
         onView(withId(R.id.search_result_list))
                 .check(new RecyclerViewItemCountAssertion(61));
+    }
+
+    // I can't find a keyword to search which have a small result set. I'd like to check if spinner
+    // hides when list reaches the bottom.
+    @Test
+    @Ignore
+    public void search_and_reach_end(){
+        // given: open search box
+        onView(withId(R.id.search)).perform(click());
+
+        // when: use hack from SO to type text in serach box
+        onView(isAssignableFrom(AutoCompleteTextView.class)).perform(typeText("have not idea"));
+        onView(isAssignableFrom(AutoCompleteTextView.class)).perform(closeSoftKeyboard());
+
+        SystemClock.sleep(1500);
+
+        // NOTE 21, 41, 61, 81 - the one is for the spinner item because it's part of the recycler view
+
+        // then: Check that the text was changed.
+        onView(withId(R.id.search_result_list))
+                .check(new RecyclerViewItemCountAssertion(16));
     }
 
 
