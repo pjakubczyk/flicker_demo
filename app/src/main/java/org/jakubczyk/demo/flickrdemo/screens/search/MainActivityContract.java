@@ -2,23 +2,35 @@ package org.jakubczyk.demo.flickrdemo.screens.search;
 
 import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 
-import java.util.List;
-
 import rx.Observable;
 
-public class MainActivityContract {
+public interface MainActivityContract {
 
-    public interface View {
+    interface View {
 
-        void addPhotos(List<Photo> photoList);
+        void refreshList();
+
+        void showEmpty();
+
+        void showList();
     }
 
-    public interface Presenter {
+    interface Presenter {
 
         void create(View view);
 
         void observeSearch(Observable<CharSequence> charSequenceObservable);
 
         void destroy();
+
+        Photo getItemAtPosition(int position);
+
+        int getItemsCount();
+
+        void loadNextPage();
+
+        boolean isLoadingNextPage();
+
+        boolean hasLoadedAllItems();
     }
 }

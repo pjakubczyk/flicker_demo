@@ -7,15 +7,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.paginate.Paginate;
 
 import org.jakubczyk.demo.flickrdemo.R;
-import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
 import org.jakubczyk.demo.flickrdemo.screens.BaseActivity;
-
-import java.util.List;
 
 
 public class MainActivity extends BaseActivity implements MainActivityContract.View {
@@ -28,14 +27,19 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        presenter = new MainActivityPresenter(component.getFlickrRepository());
+
         setContentView(binding.getRoot());
 
+        searchResultAdapter = new SearchResultAdapter(presenter);
         binding.searchResultList.setLayoutManager(new GridLayoutManager(this, 3));
-
-        searchResultAdapter = new SearchResultAdapter();
         binding.searchResultList.setAdapter(searchResultAdapter);
 
-        presenter = new MainActivityPresenter(component.getFlickrRepository());
+        Paginate.with(binding.searchResultList, new SearchResultAdapterCallback(presenter))
+                .setLoadingTriggerThreshold(2)
+                .addLoadingListItem(true)
+                .build();
+
         presenter.create(this);
     }
 
@@ -64,9 +68,20 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
     }
 
     @Override
-    public void addPhotos(List<Photo> photoList) {
-        searchResultAdapter.addItems(photoList);
+    public void refreshList() {
+        searchResultAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showEmpty() {
+        binding.searchResultList.setVisibility(View.GONE);
+        binding.listEmpty.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showList() {
+        binding.searchResultList.setVisibility(View.VISIBLE);
+        binding.listEmpty.setVisibility(View.GONE);
+    }
 
 }

@@ -4,19 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 import org.jakubczyk.demo.flickrdemo.databinding.SearchResultItemBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class SearchResultAdapter extends RecyclerView.Adapter<SearchResultItem> {
 
-    List<Photo> photoList = new ArrayList<>();
+    private MainActivityContract.Presenter presenter;
 
-    void addItems(List<Photo> morePhotos) {
-        photoList.addAll(morePhotos);
-        notifyDataSetChanged();
+    public SearchResultAdapter(MainActivityContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -29,11 +24,11 @@ class SearchResultAdapter extends RecyclerView.Adapter<SearchResultItem> {
 
     @Override
     public void onBindViewHolder(SearchResultItem holder, int position) {
-        holder.bind(photoList.get(position));
+        holder.bind(presenter.getItemAtPosition(position));
     }
 
     @Override
     public int getItemCount() {
-        return photoList.size();
+        return presenter.getItemsCount();
     }
 }
