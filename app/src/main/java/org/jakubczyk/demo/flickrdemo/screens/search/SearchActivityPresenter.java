@@ -68,6 +68,8 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
     }
 
     void handleNewData(List<Photo> photoList) {
+        isLoadingNextPage = false;
+
         photos.addAll(photoList);
 
         shouldShowList();
