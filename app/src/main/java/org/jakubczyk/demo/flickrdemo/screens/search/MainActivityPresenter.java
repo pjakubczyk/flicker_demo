@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.functions.Action1;
 
 public class MainActivityPresenter implements MainActivityContract.Presenter {
 
@@ -18,9 +20,14 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
 
     private MainActivityContract.View view;
     private FlickrRepository flickrRepository;
+    private Scheduler mainScheduler;
 
-    public MainActivityPresenter(FlickrRepository flickrRepository) {
+    public MainActivityPresenter(
+            FlickrRepository flickrRepository,
+            Scheduler mainScheduler
+    ) {
         this.flickrRepository = flickrRepository;
+        this.mainScheduler = mainScheduler;
     }
 
     @Override
@@ -39,7 +46,15 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     public void observeSearch(Observable<CharSequence> charSequenceObservable) {
         charSequenceObservable
                 // don't flood with requests
-                .debounce(3, TimeUnit.SECONDS)
+                .debounce(1, TimeUnit.SECONDS)
+                .observeOn(mainScheduler)
+                .doOnNext(new Action1<CharSequence>() {
+                    @Override
+                    public void call(CharSequence charSequence) {
+                        photos.clear();
+                        shouldShowList();
+                    }
+                })
                 .filter(textToSearch -> textToSearch.length() > 0)
                 .flatMap(textToSearch -> flickrRepository.searchFlickr(textToSearch.toString()))
                 .map(this::processResponse)

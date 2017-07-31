@@ -15,6 +15,8 @@ import com.paginate.Paginate;
 import org.jakubczyk.demo.flickrdemo.R;
 import org.jakubczyk.demo.flickrdemo.databinding.ActivityMainBinding;
 import org.jakubczyk.demo.flickrdemo.screens.BaseActivity;
+import org.jakubczyk.demo.flickrdemo.screens.search.di.DaggerSearchComponent;
+import org.jakubczyk.demo.flickrdemo.screens.search.di.SearchComponent;
 
 
 public class MainActivity extends BaseActivity implements MainActivityContract.View {
@@ -22,12 +24,16 @@ public class MainActivity extends BaseActivity implements MainActivityContract.V
     private MainActivityContract.Presenter presenter;
     private ActivityMainBinding binding;
     private SearchResultAdapter searchResultAdapter;
+    private SearchComponent searchComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        searchComponent = DaggerSearchComponent.builder().appComponent(component).build();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        presenter = new MainActivityPresenter(component.getFlickrRepository());
+        presenter = searchComponent.getPresenter();
 
         setContentView(binding.getRoot());
 

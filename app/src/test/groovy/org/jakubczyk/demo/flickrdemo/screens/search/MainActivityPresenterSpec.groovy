@@ -192,6 +192,27 @@ class MainActivityPresenterSpec extends Specification {
         presenter.hasLoadedAllItems()
     }
 
+    def "should clear old data before querying for another results"() {
+        given:
+        flickrRepository.searchFlickr("hey there") >> Observable.just(buildResponse())
+        flickrRepository.searchFlickr("other") >> Observable.just(buildThreeItemResponse())
+
+        and:
+        presenter.create(view)
+
+        when: "first search"
+        presenter.observeSearch(Observable.just("hey there"))
+
+        and: "second search"
+        presenter.observeSearch(Observable.just("other"))
+
+        then:
+        presenter.getItemsCount() == 3
+
+        and:
+        presenter.getItemAtPosition(1).id == "photo12_id"
+    }
+
     def buildResponse() {
         def photo1 = new Photo(
                 id: "photo1_id"
@@ -210,6 +231,30 @@ class MainActivityPresenterSpec extends Specification {
                 photos: photos
         )
     }
+
+    def buildThreeItemResponse() {
+        def photo1 = new Photo(
+                id: "photo11_id"
+        )
+
+        def photo2 = new Photo(
+                id: "photo12_id"
+        )
+
+        def photo3 = new Photo(
+                id: "photo13_id"
+        )
+
+        def photos = new Photos(
+                photoList: [photo1, photo2, photo3],
+                totalPages: 2
+        )
+
+        return new SearchResponse(
+                photos: photos
+        )
+    }
+
 
     def buildFirstPageAsLastPageResponse() {
         def photo1 = new Photo(
