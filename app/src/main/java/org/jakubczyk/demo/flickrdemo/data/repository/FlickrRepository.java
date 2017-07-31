@@ -61,6 +61,7 @@ public class FlickrRepository {
                         pageToSearch,
                         textToSearch
                 )
+                // save the value only when it's success
                 .doOnNext(searchResponse -> currentPage = pageToSearch)
                 .subscribeOn(ioScheduler)
                 .observeOn(mainScheduler);

@@ -10,21 +10,31 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
-public class MainActivityPresenter implements MainActivityContract.Presenter {
+public class SearchActivityPresenter implements SearchActivityContract.Presenter {
 
     // We don't know what is going to be size of the list
     private List<Photo> photos = new LinkedList<>();
 
-    private MainActivityContract.View view;
+    private SearchActivityContract.View view;
     private FlickrRepository flickrRepository;
+    private Scheduler mainScheduler;
 
-    public MainActivityPresenter(FlickrRepository flickrRepository) {
+    CompositeSubscription compositeSubscription = new CompositeSubscription();
+
+    public SearchActivityPresenter(
+            FlickrRepository flickrRepository,
+            Scheduler mainScheduler
+    ) {
         this.flickrRepository = flickrRepository;
+        this.mainScheduler = mainScheduler;
     }
 
     @Override
-    public void create(MainActivityContract.View view) {
+    public void create(SearchActivityContract.View view) {
         this.view = view;
 
         this.view.showEmpty();
@@ -33,17 +43,26 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     @Override
     public void destroy() {
         view = null;
+        compositeSubscription.unsubscribe();
     }
 
     @Override
     public void observeSearch(Observable<CharSequence> charSequenceObservable) {
-        charSequenceObservable
+        Subscription searchSubscription = charSequenceObservable
                 // don't flood with requests
-                .debounce(3, TimeUnit.SECONDS)
+                .debounce(1, TimeUnit.SECONDS)
+                .observeOn(mainScheduler)
+                // it means user deleted all text
+                .doOnNext(charSequence -> {
+                    photos.clear();
+                    shouldShowList();
+                })
                 .filter(textToSearch -> textToSearch.length() > 0)
                 .flatMap(textToSearch -> flickrRepository.searchFlickr(textToSearch.toString()))
                 .map(this::processResponse)
                 .subscribe(this::handleNewData);
+
+        compositeSubscription.add(searchSubscription);
     }
 
     void shouldShowList() {
@@ -56,6 +75,8 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     }
 
     void handleNewData(List<Photo> photoList) {
+        isLoadingNextPage = false;
+
         photos.addAll(photoList);
 
         shouldShowList();
@@ -82,10 +103,13 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     public void loadNextPage() {
         isLoadingNextPage = true;
 
-        flickrRepository
+        Subscription loadMoreSubscription = flickrRepository
                 .loadNext()
                 .map(this::processResponse)
+                .observeOn(mainScheduler)
                 .subscribe(this::handleNewData);
+
+        compositeSubscription.add(loadMoreSubscription);
     }
 
     private List<Photo> processResponse(SearchResponse searchResponse) {

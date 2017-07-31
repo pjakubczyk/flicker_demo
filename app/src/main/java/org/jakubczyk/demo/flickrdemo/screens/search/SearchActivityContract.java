@@ -4,7 +4,7 @@ import org.jakubczyk.demo.flickrdemo.data.api.json.Photo;
 
 import rx.Observable;
 
-public interface MainActivityContract {
+public interface SearchActivityContract {
 
     interface View {
 

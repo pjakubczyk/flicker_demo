@@ -8,9 +8,9 @@ import org.jakubczyk.demo.flickrdemo.databinding.SearchResultItemBinding;
 
 class SearchResultAdapter extends RecyclerView.Adapter<SearchResultItem> {
 
-    private MainActivityContract.Presenter presenter;
+    private SearchActivityContract.Presenter presenter;
 
-    public SearchResultAdapter(MainActivityContract.Presenter presenter) {
+    public SearchResultAdapter(SearchActivityContract.Presenter presenter) {
         this.presenter = presenter;
     }
 

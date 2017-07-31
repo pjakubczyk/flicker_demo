@@ -5,9 +5,9 @@ import com.paginate.Paginate;
 
 public class SearchResultAdapterCallback implements Paginate.Callbacks {
 
-    private MainActivityContract.Presenter presenter;
+    private SearchActivityContract.Presenter presenter;
 
-    public SearchResultAdapterCallback(MainActivityContract.Presenter presenter){
+    public SearchResultAdapterCallback(SearchActivityContract.Presenter presenter){
         this.presenter = presenter;
     }
 
