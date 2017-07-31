@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 
 import org.hamcrest.Matcher;
-import org.jakubczyk.demo.flickrdemo.screens.search.MainActivity;
+import org.jakubczyk.demo.flickrdemo.screens.search.SearchActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,8 +28,8 @@ import static org.hamcrest.Matchers.is;
 public class SearchInstrumentedTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+    public ActivityTestRule<SearchActivity> mActivityRule = new ActivityTestRule<>(
+            SearchActivity.class);
 
     @Test
     public void change_text_on_search() {

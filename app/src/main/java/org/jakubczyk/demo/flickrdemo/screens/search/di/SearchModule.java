@@ -2,8 +2,8 @@ package org.jakubczyk.demo.flickrdemo.screens.search.di;
 
 import org.jakubczyk.demo.flickrdemo.data.repository.FlickrRepository;
 import org.jakubczyk.demo.flickrdemo.di.ThreadingModule;
-import org.jakubczyk.demo.flickrdemo.screens.search.MainActivityContract;
-import org.jakubczyk.demo.flickrdemo.screens.search.MainActivityPresenter;
+import org.jakubczyk.demo.flickrdemo.screens.search.SearchActivityContract;
+import org.jakubczyk.demo.flickrdemo.screens.search.SearchActivityPresenter;
 
 import javax.inject.Named;
 
@@ -15,10 +15,10 @@ import rx.Scheduler;
 public class SearchModule {
 
     @Provides
-    MainActivityContract.Presenter providePresenter(
+    SearchActivityContract.Presenter providePresenter(
             FlickrRepository flickrRepository,
             @Named(ThreadingModule.MAIN) Scheduler mainScheduler
     ) {
-        return new MainActivityPresenter(flickrRepository, mainScheduler);
+        return new SearchActivityPresenter(flickrRepository, mainScheduler);
     }
 }

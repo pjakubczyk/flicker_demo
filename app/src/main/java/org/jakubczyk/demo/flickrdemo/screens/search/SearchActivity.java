@@ -19,9 +19,9 @@ import org.jakubczyk.demo.flickrdemo.screens.search.di.DaggerSearchComponent;
 import org.jakubczyk.demo.flickrdemo.screens.search.di.SearchComponent;
 
 
-public class MainActivity extends BaseActivity implements MainActivityContract.View {
+public class SearchActivity extends BaseActivity implements SearchActivityContract.View {
 
-    private MainActivityContract.Presenter presenter;
+    private SearchActivityContract.Presenter presenter;
     private ActivityMainBinding binding;
     private SearchResultAdapter searchResultAdapter;
     private SearchComponent searchComponent;

@@ -13,16 +13,16 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.functions.Action1;
 
-public class MainActivityPresenter implements MainActivityContract.Presenter {
+public class SearchActivityPresenter implements SearchActivityContract.Presenter {
 
     // We don't know what is going to be size of the list
     private List<Photo> photos = new LinkedList<>();
 
-    private MainActivityContract.View view;
+    private SearchActivityContract.View view;
     private FlickrRepository flickrRepository;
     private Scheduler mainScheduler;
 
-    public MainActivityPresenter(
+    public SearchActivityPresenter(
             FlickrRepository flickrRepository,
             Scheduler mainScheduler
     ) {
@@ -31,7 +31,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     }
 
     @Override
-    public void create(MainActivityContract.View view) {
+    public void create(SearchActivityContract.View view) {
         this.view = view;
 
         this.view.showEmpty();

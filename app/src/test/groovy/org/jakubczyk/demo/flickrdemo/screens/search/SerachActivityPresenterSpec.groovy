@@ -5,19 +5,22 @@ import org.jakubczyk.demo.flickrdemo.data.api.json.Photos
 import org.jakubczyk.demo.flickrdemo.data.api.json.SearchResponse
 import org.jakubczyk.demo.flickrdemo.data.repository.FlickrRepository
 import rx.Observable
+import rx.schedulers.TestScheduler
 import spock.lang.Specification
 
-class MainActivityPresenterSpec extends Specification {
+class SerachActivityPresenterSpec extends Specification {
 
     // mocks
-    def view = Mock(MainActivityContract.View)
+    def view = Mock(SearchActivityContract.View)
     def flickrRepository = Mock(FlickrRepository)
 
+    def testScheduler = new TestScheduler()
+
     // object under test
-    MainActivityContract.Presenter presenter
+    SearchActivityContract.Presenter presenter
 
     def "setup"() {
-        presenter = new MainActivityPresenter(flickrRepository)
+        presenter = new SearchActivityPresenter(flickrRepository, testScheduler)
     }
 
     def "should assign view on create"() {
@@ -57,6 +60,9 @@ class MainActivityPresenterSpec extends Specification {
         when:
         presenter.observeSearch(searchStream)
 
+        and:
+        testScheduler.triggerActions()
+
         then:
         1 * flickrRepository.searchFlickr("hey there") >> Observable.just(buildResponse())
 
@@ -79,6 +85,9 @@ class MainActivityPresenterSpec extends Specification {
 
         when:
         presenter.observeSearch(searchStream)
+
+        and:
+        testScheduler.triggerActions()
 
         then:
         presenter.getItemsCount() == 2
@@ -116,8 +125,11 @@ class MainActivityPresenterSpec extends Specification {
         when:
         presenter.observeSearch(searchStream)
 
-        then:
-        1 * view.showEmpty()
+        and:
+        testScheduler.triggerActions()
+
+        then: "one for on create, one for observe"
+        2 * view.showEmpty()
     }
 
     def "should return loading status"() {
@@ -162,6 +174,9 @@ class MainActivityPresenterSpec extends Specification {
         and:
         presenter.observeSearch(Observable.just("hey there"))
 
+        and:
+        testScheduler.triggerActions()
+
         assert !presenter.hasLoadedAllItems()
 
         when:
@@ -185,6 +200,9 @@ class MainActivityPresenterSpec extends Specification {
         when:
         presenter.observeSearch(Observable.just("hey there"))
 
+        and:
+        testScheduler.triggerActions()
+
         then:
         presenter.getItemsCount() == 2
 
@@ -205,6 +223,9 @@ class MainActivityPresenterSpec extends Specification {
 
         and: "second search"
         presenter.observeSearch(Observable.just("other"))
+
+        and:
+        testScheduler.triggerActions()
 
         then:
         presenter.getItemsCount() == 3
