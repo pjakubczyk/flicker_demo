@@ -8,7 +8,7 @@ import rx.Observable
 import rx.schedulers.TestScheduler
 import spock.lang.Specification
 
-class SerachActivityPresenterSpec extends Specification {
+class SearchActivityPresenterSpec extends Specification {
 
     // mocks
     def view = Mock(SearchActivityContract.View)
@@ -158,6 +158,9 @@ class SerachActivityPresenterSpec extends Specification {
         when:
         presenter.loadNextPage()
 
+        and:
+        testScheduler.triggerActions()
+
         then:
         1 * view.showList()
     }
@@ -181,6 +184,9 @@ class SerachActivityPresenterSpec extends Specification {
 
         when:
         presenter.loadNextPage()
+
+        and:
+        testScheduler.triggerActions()
 
         then:
         presenter.getItemsCount() == 4
@@ -234,6 +240,52 @@ class SerachActivityPresenterSpec extends Specification {
         presenter.getItemAtPosition(1).id == "photo12_id"
     }
 
+    def "should add new search subscription to composite subscription"() {
+        given:
+        presenter.create(view)
+
+        and: "ensure nothing's there"
+        assert !presenter.compositeSubscription.hasSubscriptions()
+
+        when:
+        presenter.observeSearch(Observable.just("hey there"))
+
+        then:
+        presenter.compositeSubscription.hasSubscriptions()
+    }
+
+    def "should add load next page subscription to composite subscription"() {
+        given:
+        presenter.create(view)
+
+        and:
+        flickrRepository.loadNext() >> Observable.just(buildLastPageResponse())
+
+        and: "ensure nothing's there"
+        assert !presenter.compositeSubscription.hasSubscriptions()
+
+        when:
+        presenter.loadNextPage()
+
+        then:
+        presenter.compositeSubscription.hasSubscriptions()
+    }
+
+    def "should clear composite subscription on destroy"() {
+        given:
+        presenter.create(view)
+
+        and: "place some subscription"
+        presenter.observeSearch(Observable.just("hey there"))
+
+        when:
+        presenter.destroy()
+
+        then:
+        !presenter.compositeSubscription.hasSubscriptions()
+    }
+
+    // test data
     def buildResponse() {
         def photo1 = new Photo(
                 id: "photo1_id"

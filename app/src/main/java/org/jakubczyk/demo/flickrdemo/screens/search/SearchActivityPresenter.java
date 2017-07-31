@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Scheduler;
-import rx.functions.Action1;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 public class SearchActivityPresenter implements SearchActivityContract.Presenter {
 
@@ -21,6 +22,8 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
     private SearchActivityContract.View view;
     private FlickrRepository flickrRepository;
     private Scheduler mainScheduler;
+
+    CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     public SearchActivityPresenter(
             FlickrRepository flickrRepository,
@@ -40,11 +43,12 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
     @Override
     public void destroy() {
         view = null;
+        compositeSubscription.unsubscribe();
     }
 
     @Override
     public void observeSearch(Observable<CharSequence> charSequenceObservable) {
-        charSequenceObservable
+        Subscription searchSubscription = charSequenceObservable
                 // don't flood with requests
                 .debounce(1, TimeUnit.SECONDS)
                 .observeOn(mainScheduler)
@@ -57,6 +61,8 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
                 .flatMap(textToSearch -> flickrRepository.searchFlickr(textToSearch.toString()))
                 .map(this::processResponse)
                 .subscribe(this::handleNewData);
+
+        compositeSubscription.add(searchSubscription);
     }
 
     void shouldShowList() {
@@ -97,10 +103,13 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
     public void loadNextPage() {
         isLoadingNextPage = true;
 
-        flickrRepository
+        Subscription loadMoreSubscription = flickrRepository
                 .loadNext()
                 .map(this::processResponse)
+                .observeOn(mainScheduler)
                 .subscribe(this::handleNewData);
+
+        compositeSubscription.add(loadMoreSubscription);
     }
 
     private List<Photo> processResponse(SearchResponse searchResponse) {
