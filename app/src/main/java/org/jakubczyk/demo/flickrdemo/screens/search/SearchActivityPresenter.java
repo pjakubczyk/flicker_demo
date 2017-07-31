@@ -48,6 +48,7 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
                 // don't flood with requests
                 .debounce(1, TimeUnit.SECONDS)
                 .observeOn(mainScheduler)
+                // it means user deleted all text
                 .doOnNext(charSequence -> {
                     photos.clear();
                     shouldShowList();
