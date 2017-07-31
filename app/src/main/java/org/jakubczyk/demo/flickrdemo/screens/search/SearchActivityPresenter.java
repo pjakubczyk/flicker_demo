@@ -48,12 +48,9 @@ public class SearchActivityPresenter implements SearchActivityContract.Presenter
                 // don't flood with requests
                 .debounce(1, TimeUnit.SECONDS)
                 .observeOn(mainScheduler)
-                .doOnNext(new Action1<CharSequence>() {
-                    @Override
-                    public void call(CharSequence charSequence) {
-                        photos.clear();
-                        shouldShowList();
-                    }
+                .doOnNext(charSequence -> {
+                    photos.clear();
+                    shouldShowList();
                 })
                 .filter(textToSearch -> textToSearch.length() > 0)
                 .flatMap(textToSearch -> flickrRepository.searchFlickr(textToSearch.toString()))
