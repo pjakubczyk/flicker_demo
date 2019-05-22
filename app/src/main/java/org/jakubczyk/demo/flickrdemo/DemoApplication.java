@@ -10,6 +10,8 @@ public class DemoApplication extends Application {
 
     private AppComponent appComponent;
 
+    int a = 5;
+    
     @Override
     public void onCreate() {
         super.onCreate();
